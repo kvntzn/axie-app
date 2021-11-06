@@ -1,21 +1,14 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StatusBar } from 'expo-status-bar'
+import Routes from './src/navigation/Routes'
+import React from 'react'
+import * as eva from '@eva-design/eva'
+import { ApplicationProvider } from '@ui-kitten/components'
+import { default as theme } from './src/styles/custom-theme.json'
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+    <ApplicationProvider {...eva} theme={{ ...eva.light, ...theme }}>
+      <Routes />
+    </ApplicationProvider>
+  )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
