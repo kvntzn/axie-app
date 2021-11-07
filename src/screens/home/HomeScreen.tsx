@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, View, Image, FlatList, ScrollView } from 'react-native'
+import { StyleSheet, View, ScrollView } from 'react-native'
 import { Layout, Text, Input } from '@ui-kitten/components'
 import { AxiesSoldCard, Selection } from './components'
-import { LAYOUT_SHADOW } from '../../styles/misc'
 import { GetRecentlyAxiesSold } from '../../api/recently'
 import { AxiesSoldResult } from '../../interface'
+import RecentlySoldTab from './components/RecentlySoldTab'
 
 const HomeScreen = () => {
   const [recentAxies, setRecentAxies] = useState<AxiesSoldResult[]>([])
+
+  const [selectSoldIndex, setSelectSoldIndex] = useState<number>(0)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -79,6 +81,11 @@ const HomeScreen = () => {
           <Text style={{ margin: 16, marginBottom: 0 }} category={'h6'}>
             Recently sold
           </Text>
+
+          <RecentlySoldTab
+            value={selectSoldIndex}
+            onChangeItem={(index: number) => setSelectSoldIndex(index)}
+          />
 
           {recentAxies.map((data) => (
             <AxiesSoldCard item={data} key={data.id} />
