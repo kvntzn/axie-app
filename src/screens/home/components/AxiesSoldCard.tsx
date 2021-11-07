@@ -1,12 +1,49 @@
-import React from 'react'
+import React, { memo } from 'react'
 import { StyleSheet, View, Image, TouchableOpacity } from 'react-native'
 import { Layout, Text, Card } from '@ui-kitten/components'
 import { LAYOUT_SHADOW } from '../../../styles/misc'
 import { AxiesSoldResult } from '../../../interface'
 import { determineBackground } from '../../../util/classSelector'
 import moment from 'moment'
+import {
+  AquaIcon,
+  BeastIcon,
+  BirdIcon,
+  BugIcon,
+  DawnIcon,
+  DuskIcon,
+  MechIcon,
+  PlantIcon,
+  ReptileIcon,
+} from '../../../components'
+import { AXIE_CLASS } from '../../../constants/axieClass'
 
 const AxiesSoldCard: React.FC<{ item: AxiesSoldResult }> = ({ item }) => {
+  const renderClassBackground = (element: string) => {
+    switch (element) {
+      case AXIE_CLASS.AQUA:
+        return <AquaIcon style={styles.classBG} />
+      case AXIE_CLASS.BEAST:
+        return <BeastIcon style={styles.classBG} />
+      case AXIE_CLASS.PLANT:
+        return <PlantIcon style={styles.classBG} />
+      case AXIE_CLASS.BIRD:
+        return <BirdIcon style={styles.classBG} />
+      case AXIE_CLASS.BUG:
+        return <BugIcon style={styles.classBG} />
+      case AXIE_CLASS.REPTILE:
+        return <ReptileIcon style={styles.classBG} />
+      case AXIE_CLASS.MECH:
+        return <MechIcon style={styles.classBG} />
+      case AXIE_CLASS.DAWN:
+        return <DawnIcon style={styles.classBG} />
+      case AXIE_CLASS.DUSK:
+        return <DuskIcon style={styles.classBG} />
+      default:
+        return <BeastIcon style={styles.classBG} />
+    }
+  }
+
   return (
     <TouchableOpacity
       style={{
@@ -22,6 +59,7 @@ const AxiesSoldCard: React.FC<{ item: AxiesSoldResult }> = ({ item }) => {
           flex: 1,
           flexDirection: 'row',
           justifyContent: 'space-between',
+          marginBottom: 4
         }}
       >
         <Text style={{ color: '#fff' }} category={'s1'}>
@@ -99,10 +137,21 @@ const AxiesSoldCard: React.FC<{ item: AxiesSoldResult }> = ({ item }) => {
 
         <Image source={{ uri: item.image }} style={{ height: 60, width: 60 }} />
       </View>
+
+      {renderClassBackground(item.class)}
     </TouchableOpacity>
   )
 }
 
-export default AxiesSoldCard
+export default memo(AxiesSoldCard)
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  classBG: {
+    position: 'absolute',
+    right: 10,
+    bottom: 0,
+    zIndex: -1,
+    height: 100,
+    width: 100,
+  },
+})
