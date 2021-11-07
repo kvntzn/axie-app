@@ -1,4 +1,4 @@
-import { StatusBar } from 'expo-status-bar'
+import 'react-native-gesture-handler';
 import Routes from './src/navigation/Routes'
 import React from 'react'
 import * as eva from '@eva-design/eva'

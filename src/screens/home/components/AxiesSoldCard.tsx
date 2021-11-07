@@ -17,8 +17,12 @@ import {
   ReptileIcon,
 } from '../../../components'
 import { AXIE_CLASS } from '../../../constants/axieClass'
+import { SharedElement } from 'react-navigation-shared-element'
+import { useNavigation } from '@react-navigation/core'
 
 const AxiesSoldCard: React.FC<{ item: AxiesSoldResult }> = ({ item }) => {
+  const { navigate } = useNavigation()
+
   const renderClassBackground = (element: string) => {
     switch (element) {
       case AXIE_CLASS.AQUA:
@@ -46,6 +50,9 @@ const AxiesSoldCard: React.FC<{ item: AxiesSoldResult }> = ({ item }) => {
 
   return (
     <TouchableOpacity
+      onPress={() => {
+        navigate('AxieDetail', { axie: item })
+      }}
       style={{
         margin: 16,
         marginVertical: 8,
@@ -59,7 +66,7 @@ const AxiesSoldCard: React.FC<{ item: AxiesSoldResult }> = ({ item }) => {
           flex: 1,
           flexDirection: 'row',
           justifyContent: 'space-between',
-          marginBottom: 4
+          marginBottom: 4,
         }}
       >
         <Text style={{ color: '#fff' }} category={'s1'}>
@@ -135,7 +142,12 @@ const AxiesSoldCard: React.FC<{ item: AxiesSoldResult }> = ({ item }) => {
           </Text>
         </View>
 
-        <Image source={{ uri: item.image }} style={{ height: 60, width: 60 }} />
+        <SharedElement id={item.id}>
+          <Image
+            source={{ uri: item.image }}
+            style={{ height: 60, width: 60 }}
+          />
+        </SharedElement>
       </View>
 
       {renderClassBackground(item.class)}
