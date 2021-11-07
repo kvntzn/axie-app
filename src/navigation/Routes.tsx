@@ -11,7 +11,14 @@ const Stack = createSharedElementStackNavigator()
 const Routes = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator
+        defaultScreenOptions={{
+          cardStyleInterpolator: ({ current: { progress } }) => {
+            return { cardStyle: { opacity: progress } }
+          },
+          cardStyle: { backgroundColor: 'transparent' },
+        }}
+      >
         <Stack.Screen
           name='Home'
           component={HomeScreen}
@@ -23,11 +30,30 @@ const Routes = () => {
           name='AxieDetail'
           component={AxieDetailScreen}
           options={{
-            headerTitle: '',
+            headerShown: false,
           }}
           sharedElements={(route, otherRoute, showing) => {
             const { axie } = route.params
-            return [axie.id]
+            return [
+              {
+                id: `item.${axie.id}.bg`,
+              },
+              {
+                id: `general.bg`,
+              },
+              {
+                id: `item.${axie.id}.class`,
+              },
+              {
+                id: `item.${axie.id}.id`,
+              },
+              {
+                id: `item.${axie.id}.name`,
+              },
+              {
+                id: `item.${axie.id}.image`,
+              },
+            ]
           }}
         />
       </Stack.Navigator>

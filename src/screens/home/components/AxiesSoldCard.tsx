@@ -5,48 +5,13 @@ import { LAYOUT_SHADOW } from '../../../styles/misc'
 import { AxiesSoldResult } from '../../../interface'
 import { determineBackground } from '../../../util/classSelector'
 import moment from 'moment'
-import {
-  AquaIcon,
-  BeastIcon,
-  BirdIcon,
-  BugIcon,
-  DawnIcon,
-  DuskIcon,
-  MechIcon,
-  PlantIcon,
-  ReptileIcon,
-} from '../../../components'
+import { AxieClassIcon } from '../../../components'
 import { AXIE_CLASS } from '../../../constants/axieClass'
 import { SharedElement } from 'react-navigation-shared-element'
 import { useNavigation } from '@react-navigation/core'
 
 const AxiesSoldCard: React.FC<{ item: AxiesSoldResult }> = ({ item }) => {
   const { navigate } = useNavigation()
-
-  const renderClassBackground = (element: string) => {
-    switch (element) {
-      case AXIE_CLASS.AQUA:
-        return <AquaIcon style={styles.classBG} />
-      case AXIE_CLASS.BEAST:
-        return <BeastIcon style={styles.classBG} />
-      case AXIE_CLASS.PLANT:
-        return <PlantIcon style={styles.classBG} />
-      case AXIE_CLASS.BIRD:
-        return <BirdIcon style={styles.classBG} />
-      case AXIE_CLASS.BUG:
-        return <BugIcon style={styles.classBG} />
-      case AXIE_CLASS.REPTILE:
-        return <ReptileIcon style={styles.classBG} />
-      case AXIE_CLASS.MECH:
-        return <MechIcon style={styles.classBG} />
-      case AXIE_CLASS.DAWN:
-        return <DawnIcon style={styles.classBG} />
-      case AXIE_CLASS.DUSK:
-        return <DuskIcon style={styles.classBG} />
-      default:
-        return null
-    }
-  }
 
   return (
     <TouchableOpacity
@@ -56,11 +21,38 @@ const AxiesSoldCard: React.FC<{ item: AxiesSoldResult }> = ({ item }) => {
       style={{
         margin: 16,
         marginVertical: 8,
-        borderRadius: 25,
         padding: 16,
-        backgroundColor: `${determineBackground(item.class)}B3`,
       }}
     >
+      <SharedElement id={`item.${item.id}.class`}>
+        <AxieClassIcon
+          element={item.class}
+          opacity={'0.2'}
+          color={'#fff'}
+          style={styles.classBG}
+        />
+      </SharedElement>
+
+      <SharedElement
+        id={`item.${item.id}.bg`}
+        style={[
+          StyleSheet.absoluteFillObject,
+          {
+            zIndex: -1,
+          },
+        ]}
+      >
+        <View
+          style={[
+            StyleSheet.absoluteFillObject,
+            {
+              borderRadius: 25,
+              backgroundColor: `${determineBackground(item.class)}B3`,
+            },
+          ]}
+        />
+      </SharedElement>
+
       <View
         style={{
           flex: 1,
@@ -69,15 +61,17 @@ const AxiesSoldCard: React.FC<{ item: AxiesSoldResult }> = ({ item }) => {
           marginBottom: 4,
         }}
       >
-        <Text style={{ color: '#fff' }} category={'s1'}>
-          #{item.id}
-        </Text>
+        <SharedElement id={`item.${item.id}.name`}>
+          <Text style={{ color: '#fff' }} category={'s1'}>
+            {item.name}
+          </Text>
+        </SharedElement>
 
-        <Text style={{ color: '#fff' }} category={'s1'}>
-          {moment(
-            new Date(item.transferHistory.results[0].timestamp * 1000)
-          ).fromNow()}
-        </Text>
+        <SharedElement id={`item.${item.id}.id`}>
+          <Text style={{ color: '#fff' }} category={'s1'}>
+            #{item.id}
+          </Text>
+        </SharedElement>
       </View>
 
       <View
@@ -142,7 +136,7 @@ const AxiesSoldCard: React.FC<{ item: AxiesSoldResult }> = ({ item }) => {
           </Text>
         </View>
 
-        <SharedElement id={item.id}>
+        <SharedElement id={`item.${item.id}.image`}>
           <Image
             source={{ uri: item.image }}
             style={{ height: 60, width: 60 }}
@@ -150,7 +144,11 @@ const AxiesSoldCard: React.FC<{ item: AxiesSoldResult }> = ({ item }) => {
         </SharedElement>
       </View>
 
-      {renderClassBackground(item.class)}
+      <Text style={{ color: '#fff', alignSelf: 'flex-end' }} category={'label'}>
+        {moment(
+          new Date(item.transferHistory.results[0].timestamp * 1000)
+        ).fromNow()}
+      </Text>
     </TouchableOpacity>
   )
 }
@@ -162,7 +160,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 10,
     bottom: 0,
-    zIndex: -1,
+    top: 10,
+    // zIndex: 1,
     height: 100,
     width: 100,
   },

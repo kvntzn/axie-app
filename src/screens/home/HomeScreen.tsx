@@ -5,6 +5,7 @@ import { AxiesSoldCard, Selection } from './components'
 import { GetRecentlyAxiesSold } from '../../api/recently'
 import { AxiesSoldResult } from '../../interface'
 import RecentlySoldTab from './components/RecentlySoldTab'
+import { SharedElement } from 'react-navigation-shared-element'
 
 const HomeScreen = () => {
   const theme = useTheme()
@@ -106,6 +107,9 @@ const HomeScreen = () => {
           </View>
         </Layout>
       </ScrollView>
+      <SharedElement id={`general.bg`}>
+        <View style={{ backgroundColor: '#fff', height: 1 }} />
+      </SharedElement>
     </SafeAreaView>
   )
 }
