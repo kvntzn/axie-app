@@ -1,11 +1,24 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { StyleSheet, View, Image, FlatList } from 'react-native'
 import { Layout, Text, Input } from '@ui-kitten/components'
 import { Selection } from './components'
 import { LAYOUT_SHADOW } from '../../styles/misc'
+import { GetRecentlyAxiesSold } from '../../api/recently'
+import { AxiesSoldResult } from '../../interface'
 
 const HomeScreen = () => {
-  const renderItem = ({ item }: { item: any }) => {
+  const [recentAxies, setRecentAxies] = useState<AxiesSoldResult[]>([])
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await GetRecentlyAxiesSold()
+      setRecentAxies(data.settledAuctions.axies.results)
+    }
+
+    fetchData()
+  }, [])
+
+  const renderItem = ({ item }: { item: AxiesSoldResult }) => {
     return (
       <Layout
         level={'1'}
@@ -16,7 +29,7 @@ const HomeScreen = () => {
           padding: 16,
         }}
       >
-        <Text category={'s1'}>{item.id}</Text>
+        <Text category={'s1'}>#{item.id}</Text>
 
         <View
           style={{
@@ -119,17 +132,7 @@ const HomeScreen = () => {
           Recently listed
         </Text>
 
-        <FlatList
-          data={[
-            {
-              id: '#4383758',
-              breedcount: 0,
-              price: 0.82,
-              amount: 194.31,
-            },
-          ]}
-          renderItem={renderItem}
-        />
+        <FlatList data={recentAxies} renderItem={renderItem} />
       </View>
     </Layout>
   )
