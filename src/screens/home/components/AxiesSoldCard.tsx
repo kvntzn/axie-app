@@ -40,7 +40,7 @@ const AxiesSoldCard: React.FC<{ item: AxiesSoldResult }> = ({ item }) => {
       case AXIE_CLASS.DUSK:
         return <DuskIcon style={styles.classBG} />
       default:
-        return <BeastIcon style={styles.classBG} />
+        return null
     }
   }
 

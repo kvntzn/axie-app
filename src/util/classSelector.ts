@@ -6,6 +6,7 @@ import {
   BUG,
   DAWN,
   DUSK,
+  EGG,
   MECH,
   PLANT,
   REPTILE,
@@ -31,5 +32,7 @@ export const determineBackground = (element: string) => {
       return DAWN
     case AXIE_CLASS.DUSK:
       return DUSK
+    default:
+      return EGG
   }
 }
