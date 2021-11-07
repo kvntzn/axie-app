@@ -4,6 +4,7 @@ import { Layout, Text, Card } from '@ui-kitten/components'
 import { LAYOUT_SHADOW } from '../../../styles/misc'
 import { AxiesSoldResult } from '../../../interface'
 import { determineBackground } from '../../../util/classSelector'
+import moment from 'moment'
 
 const AxiesSoldCard: React.FC<{ item: AxiesSoldResult }> = ({ item }) => {
   return (
@@ -13,43 +14,90 @@ const AxiesSoldCard: React.FC<{ item: AxiesSoldResult }> = ({ item }) => {
         marginVertical: 8,
         borderRadius: 25,
         padding: 16,
-        backgroundColor: `${determineBackground(item.class)}80`,
+        backgroundColor: `${determineBackground(item.class)}B3`,
       }}
     >
-      <Text style={{color: '#fff'}} category={'s1'}>#{item.id}</Text>
+      <View
+        style={{
+          flex: 1,
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+        }}
+      >
+        <Text style={{ color: '#fff' }} category={'s1'}>
+          #{item.id}
+        </Text>
+
+        <Text style={{ color: '#fff' }} category={'s1'}>
+          {moment(
+            new Date(item.transferHistory.results[0].timestamp * 1000)
+          ).fromNow()}
+        </Text>
+      </View>
 
       <View
         style={{
+          flex: 1,
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'space-between',
         }}
       >
         <View>
-          <Layout
+          <View
             style={{
               borderRadius: 20,
               marginVertical: 4,
               padding: 4,
+              backgroundColor: `${determineBackground(item.class)}99`,
             }}
-            level={'3'}
           >
-            <Text>={item.name}</Text>
-          </Layout>
+            <Text style={{ color: '#fff' }} category={'p1'}>
+              =
+              {(
+                Number(item.transferHistory.results[0].withPrice) *
+                0.000000000000000001
+              ).toFixed(3)}
+            </Text>
+          </View>
 
-          <Layout
+          <View
             style={{
               borderRadius: 20,
               marginVertical: 4,
               padding: 4,
+              backgroundColor: `${determineBackground(item.class)}99`,
             }}
-            level={'3'}
           >
-            <Text>={item.breedCount}</Text>
-          </Layout>
+            <Text style={{ color: '#fff' }} category={'p1'}>
+              ${Number(item.transferHistory.results[0].withPriceUsd).toFixed(2)}
+            </Text>
+          </View>
         </View>
 
-        <Image source={{ uri: item.image }} style={{ height: 50, width: 50 }} />
+        <View style={{ alignSelf: 'flex-start', flex: 0.3 }}>
+          <Text style={{ color: '#fff' }} category={'s1'}>
+            Buyer
+          </Text>
+          <Text style={{ color: '#fff' }} category={'p2'} numberOfLines={2}>
+            {item.transferHistory.results[0].toProfile.name}
+          </Text>
+        </View>
+
+        <View style={{ alignSelf: 'flex-start', flex: 0.3 }}>
+          <Text style={{ color: '#fff' }} category={'s1'}>
+            Seller
+          </Text>
+          <Text
+            style={{ color: '#fff', flex: 0.1 }}
+            category={'p2'}
+            numberOfLines={2}
+          >
+            {item.transferHistory.results[0].fromProfile.name}
+          </Text>
+        </View>
+
+        <Image source={{ uri: item.image }} style={{ height: 60, width: 60 }} />
       </View>
     </TouchableOpacity>
   )

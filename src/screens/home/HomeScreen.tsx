@@ -81,7 +81,7 @@ const HomeScreen = () => {
           </Text>
 
           {recentAxies.map((data) => (
-            <AxiesSoldCard item={data} />
+            <AxiesSoldCard item={data} key={data.id} />
           ))}
         </View>
       </Layout>
