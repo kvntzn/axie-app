@@ -25,7 +25,7 @@ const HomeScreen = () => {
 
   return (
     <SafeAreaView>
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <Layout
           style={{
             flex: 1,

@@ -70,7 +70,7 @@ const AxieDetailScreen: React.FC<Props> = ({ route, navigation }) => {
           <AxieClassIcon
             element={item.class}
             opacity={'0.2'}
-            color={'#000'}
+            color={'#fff'}
             style={styles.class}
           />
         </SharedElement>
@@ -90,7 +90,50 @@ const AxieDetailScreen: React.FC<Props> = ({ route, navigation }) => {
 
       <SharedElement id={`general.bg`} style={[StyleSheet.absoluteFillObject]}>
         <View style={styles.bg}>
-          <Text>Content</Text>
+          <Text category={'s1'}>About</Text>
+
+          <View style={{ flexDirection: 'row', marginTop: 16 }}>
+            <View style={{ flex: 0.5 }}>
+              <Text category={'label'}>Class</Text>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                }}
+              >
+                <AxieClassIcon
+                  element={item.class}
+                  opacity={'1'}
+                  color={determineBackground(item.class)}
+                  style={{
+                    height: 40,
+                    width: 40,
+                    marginRight: 8,
+                    // backgroundColor: 'red',
+                  }}
+                />
+                <Text category={'p2'}>{item.class}</Text>
+              </View>
+            </View>
+
+            <View style={{ flex: 0.5 }}>
+              <Text category={'label'}>Breed Count:</Text>
+              <Text category={'p1'} style={{ marginTop: 4 }}>
+                {item.breedCount}/7
+              </Text>
+            </View>
+          </View>
+
+          <View style={{ marginTop: 8 }}>
+            <Text category={'label'}>Owner</Text>
+
+            <Text category={'s1'}>
+              {item.transferHistory.results[0].fromProfile.name}{' '}
+              <Text category={'p2'}>
+                (ronin:{item.transferHistory.results[0].from})
+              </Text>
+            </Text>
+          </View>
         </View>
       </SharedElement>
     </View>
