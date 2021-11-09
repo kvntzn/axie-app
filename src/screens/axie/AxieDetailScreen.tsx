@@ -13,6 +13,10 @@ import { AxieClassIcon } from '../../components'
 import * as Animatable from 'react-native-animatable'
 import { GetAxieDetail } from '../../api/axie'
 import { Axie } from '../../interface/IAxieDetail'
+import { determineStats } from '../../util/statsColor'
+import { STATS } from '../../constants/stats'
+import { FontAwesome5 } from '@expo/vector-icons'
+import { ScrollView } from 'react-native-gesture-handler'
 
 const DURATION = 400
 
@@ -23,190 +27,125 @@ const TOP_HEADER_HEIGHT = Dimensions.get('window').height * 0.3
 const BackIcon = (props) => <Icon {...props} name='arrow-back' />
 
 const defaultValue = {
-  id: '4038304',
-  image:
-    'https://storage.googleapis.com/assets.axieinfinity.com/axies/4038304/axie/axie-full-transparent.png',
-  class: 'Beast',
-  chain: 'ronin',
-  name: 'Nut crack',
-  genes: '0x11864440020200a002128020c622088004028040040080200a0280a',
-  owner: '0xb7a5ff69a6467de3db2aa44c9670bd8c414c9b4e',
-  birthDate: 1628751555,
-  bodyShape: 'Fuzzy',
-  sireId: 3652734,
-  sireClass: 'Beast',
-  matronId: 3652886,
-  matronClass: 'Beast',
-  stage: 4,
+  id: '',
+  image: '',
+  class: '',
+  chain: '',
+  name: '',
+  genes: '',
+  owner: '',
+  birthDate: null,
+  bodyShape: '',
+  sireId: null,
+  sireClass: '',
+  matronId: null,
+  matronClass: '',
+  stage: 0,
   title: '',
   breedCount: 0,
-  level: 1,
+  level: 0,
   figure: {
-    atlas:
-      'https://storage.googleapis.com/assets.axieinfinity.com/axies/4038304/axie/axie.atlas',
-    model:
-      'https://storage.googleapis.com/assets.axieinfinity.com/axies/4038304/axie/axie.json',
-    image:
-      'https://storage.googleapis.com/assets.axieinfinity.com/axies/4038304/axie/axie.png',
-    __typename: 'AxieFigure',
+    atlas: '',
+    model: '',
+    image: '',
+    __typename: '',
   },
   parts: [
     {
-      id: 'eyes-zeal',
-      name: 'Zeal',
-      class: 'Beast',
-      type: 'Eyes',
+      id: '1',
+      name: '',
+      class: '',
+      type: '',
+      specialGenes: null,
+      stage: 0,
+      abilities: [],
+      __typename: '',
+    },
+    {
+      id: '2',
+      name: '',
+      class: '',
+      type: '',
       specialGenes: null,
       stage: 1,
       abilities: [],
-      __typename: 'AxiePart',
+      __typename: '',
     },
     {
-      id: 'ears-rosa',
-      name: 'Rosa',
-      class: 'Plant',
-      type: 'Ears',
+      id: '4',
+      name: '',
+      class: '',
+      type: '',
       specialGenes: null,
-      stage: 1,
+      stage: 0,
       abilities: [],
-      __typename: 'AxiePart',
+      __typename: '',
     },
     {
-      id: 'back-hero',
-      name: 'Hero',
-      class: 'Beast',
-      type: 'Back',
+      id: '3',
+      name: '',
+      class: '',
+      type: '',
       specialGenes: null,
-      stage: 1,
-      abilities: [
-        {
-          id: 'beast-back-04',
-          name: 'Heroic Reward',
-          attack: 60,
-          defense: 0,
-          energy: 0,
-          description:
-            'Draw a card when attacking an Aquatic, Bird, or Dawn target.',
-          backgroundUrl:
-            'https://storage.googleapis.com/axie-cdn/game/cards/base/beast-back-04.png',
-          effectIconUrl:
-            'https://storage.googleapis.com/axie-cdn/game/cards/effect-icons/draw-card.png',
-          __typename: 'AxieCardAbility',
-        },
-      ],
-      __typename: 'AxiePart',
+      stage: 0,
+      abilities: [],
+      __typename: '',
     },
     {
-      id: 'mouth-nut-cracker',
-      name: 'Nut Cracker',
-      class: 'Beast',
-      type: 'Mouth',
+      id: '5',
+      name: '',
+      class: '',
+      type: '',
       specialGenes: null,
-      stage: 1,
-      abilities: [
-        {
-          id: 'beast-mouth-02',
-          name: 'Nut Crack',
-          attack: 105,
-          defense: 30,
-          energy: 1,
-          description:
-            "Deal 120% damage when comboed with another 'Nut Cracker' card.",
-          backgroundUrl:
-            'https://storage.googleapis.com/axie-cdn/game/cards/base/beast-mouth-02.png',
-          effectIconUrl:
-            'https://storage.googleapis.com/axie-cdn/game/cards/effect-icons/raise-damage.png',
-          __typename: 'AxieCardAbility',
-        },
-      ],
-      __typename: 'AxiePart',
+      stage: 0,
+      abilities: [],
+      __typename: '',
     },
     {
-      id: 'horn-imp',
-      name: 'Imp',
-      class: 'Beast',
-      type: 'Horn',
+      id: '6',
+      name: '',
+      class: '',
+      type: '',
       specialGenes: null,
-      stage: 1,
-      abilities: [
-        {
-          id: 'beast-horn-04',
-          name: 'Ivory Stab',
-          attack: 70,
-          defense: 20,
-          energy: 1,
-          description:
-            'Gain 1 energy per critical strike dealt by your team this round.',
-          backgroundUrl:
-            'https://storage.googleapis.com/axie-cdn/game/cards/base/beast-horn-04.png',
-          effectIconUrl:
-            'https://storage.googleapis.com/axie-cdn/game/cards/effect-icons/gain-energy.png',
-          __typename: 'AxieCardAbility',
-        },
-      ],
-      __typename: 'AxiePart',
-    },
-    {
-      id: 'tail-nut-cracker',
-      name: 'Nut Cracker',
-      class: 'Beast',
-      type: 'Tail',
-      specialGenes: null,
-      stage: 1,
-      abilities: [
-        {
-          id: 'beast-tail-10',
-          name: 'Nut Throw',
-          attack: 105,
-          defense: 30,
-          energy: 1,
-          description:
-            "Deal 120% damage when comboed with another 'Nut Cracker' card.",
-          backgroundUrl:
-            'https://storage.googleapis.com/axie-cdn/game/cards/base/beast-tail-10.png',
-          effectIconUrl:
-            'https://storage.googleapis.com/axie-cdn/game/cards/effect-icons/raise-damage.png',
-          __typename: 'AxieCardAbility',
-        },
-      ],
-      __typename: 'AxiePart',
+      stage: 0,
+      abilities: [],
+      __typename: '',
     },
   ],
   stats: {
-    hp: 34,
-    speed: 40,
-    skill: 31,
-    morale: 59,
-    __typename: 'AxieStats',
+    hp: 0,
+    speed: 0,
+    skill: 0,
+    morale: 0,
+    __typename: '',
   },
   auction: {
-    startingPrice: '40000000000000000',
-    endingPrice: '35000000000000000',
-    startingTimestamp: '1636366016',
-    endingTimestamp: '1636452416',
-    duration: '86400',
-    timeLeft: '72980',
-    currentPrice: '39223379629629629',
-    currentPriceUSD: '185.39',
-    suggestedPrice: '39226851851851851',
-    seller: '0xb7a5ff69a6467de3db2aa44c9670bd8c414c9b4e',
-    listingIndex: 2336364,
-    state:
-      '64047651063618197644769014757672962284295281101065081106062628501314322996137',
-    __typename: 'Auction',
+    startingPrice: '',
+    endingPrice: '',
+    startingTimestamp: '',
+    endingTimestamp: '',
+    duration: '',
+    timeLeft: '',
+    currentPrice: '',
+    currentPriceUSD: '',
+    suggestedPrice: '',
+    seller: '',
+    listingIndex: 0,
+    state: '',
+    __typename: '',
   },
   ownerProfile: {
-    name: 'SIOPAO 3',
-    __typename: 'PublicProfile',
+    name: '',
+    __typename: '',
   },
   battleInfo: {
     banned: false,
     banUntil: null,
     level: 0,
-    __typename: 'AxieBattleInfo',
+    __typename: '',
   },
   children: [],
-  __typename: 'Axie',
+  __typename: '',
 }
 
 const AxieDetailScreen: React.FC<Props> = ({ route, navigation }) => {
@@ -292,7 +231,7 @@ const AxieDetailScreen: React.FC<Props> = ({ route, navigation }) => {
       </View>
 
       <SharedElement id={`general.bg`} style={[StyleSheet.absoluteFillObject]}>
-        <View style={styles.bg}>
+        <ScrollView style={styles.bg}>
           {/* About */}
           <View>
             <Text category={'h6'}>About</Text>
@@ -354,31 +293,60 @@ const AxieDetailScreen: React.FC<Props> = ({ route, navigation }) => {
                     justifyContent: 'space-evenly',
                   }}
                 >
-                  <View>
-                    <Text category={'label'}>Health</Text>
-                    <View style={styles.statsValue}>
-                      <Text category={'p2'}>{axieDetail?.stats.hp}</Text>
+                  <View style={styles.statsContainer}>
+                    <Icon
+                      style={styles.statsIcon}
+                      fill={determineStats(STATS.HP)}
+                      name='heart'
+                    />
+                    <View>
+                      <Text category={'label'}>Health</Text>
+                      <View style={styles.statsValue}>
+                        <Text category={'p2'}>{axieDetail?.stats.hp}</Text>
+                      </View>
                     </View>
                   </View>
 
-                  <View>
-                    <Text category={'label'}>Speed</Text>
-                    <View style={styles.statsValue}>
-                      <Text category={'p2'}>{axieDetail?.stats.hp}</Text>
+                  <View style={styles.statsContainer}>
+                    <Icon
+                      style={styles.statsIcon}
+                      fill={determineStats(STATS.SPEED)}
+                      name='flash'
+                    />
+                    <View>
+                      <Text category={'label'}>Speed</Text>
+                      <View style={styles.statsValue}>
+                        <Text category={'p2'}>{axieDetail?.stats.hp}</Text>
+                      </View>
                     </View>
                   </View>
 
-                  <View>
-                    <Text category={'label'}>Skill</Text>
-                    <View style={styles.statsValue}>
-                      <Text category={'p2'}>{axieDetail?.stats.skill}</Text>
+                  <View style={styles.statsContainer}>
+                    <Icon
+                      style={styles.statsIcon}
+                      fill={determineStats(STATS.SKILL)}
+                      name='star'
+                    />
+                    <View>
+                      <Text category={'label'}>Skill</Text>
+                      <View style={styles.statsValue}>
+                        <Text category={'p2'}>{axieDetail?.stats.skill}</Text>
+                      </View>
                     </View>
                   </View>
 
-                  <View>
-                    <Text category={'label'}>Morale</Text>
-                    <View style={styles.statsValue}>
-                      <Text category={'p2'}>{axieDetail?.stats.morale}</Text>
+                  <View style={styles.statsContainer}>
+                    <FontAwesome5
+                      name='fire'
+                      size={18}
+                      style={{ marginRight: 8 }}
+                      color={determineStats(STATS.MORALE)}
+                    />
+                    <View>
+                      <Text category={'label'}>Morale</Text>
+                      <View style={styles.statsValue}>
+                        <Text category={'p2'}>{axieDetail?.stats.morale}</Text>
+                      </View>
                     </View>
                   </View>
                 </View>
@@ -430,7 +398,7 @@ const AxieDetailScreen: React.FC<Props> = ({ route, navigation }) => {
               </View>
             </>
           )}
-        </View>
+        </ScrollView>
       </SharedElement>
     </View>
   )
@@ -478,8 +446,10 @@ const styles = StyleSheet.create({
     width: 300,
     // transform: [{ rotate: '310deg' }],
   },
+  statsContainer: { flexDirection: 'row', alignItems: 'center' },
   statsValue: {
     flexDirection: 'row',
     alignItems: 'center',
   },
+  statsIcon: { height: 20, width: 20, marginRight: 8 },
 })

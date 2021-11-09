@@ -8,3 +8,8 @@ export const MECH = '#C6BDD3'
 export const DAWN = '#BECEFF'
 export const DUSK = '#129092'
 export const EGG = '#8D65FF'
+
+export const HP = '#3AC279'
+export const SKILL = '#6A39C2'
+export const MORALE = '#C23A3B'
+export const SPEED = '#F7AC09'

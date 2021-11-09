@@ -61,8 +61,8 @@ const AxiesSoldCard: React.FC<{ item: AxiesSoldResult }> = ({ item }) => {
           marginBottom: 4,
         }}
       >
-        <SharedElement id={`item.${item.id}.name`}>
-          <Text style={{ color: '#fff' }} category={'s1'}>
+        <SharedElement id={`item.${item.id}.name`} style={{ flexShrink: 1 }}>
+          <Text style={{ color: '#fff' }} category={'s1'} numberOfLines={1}>
             {item.name}
           </Text>
         </SharedElement>
