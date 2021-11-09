@@ -17,6 +17,7 @@ import { determineStats } from '../../util/statsColor'
 import { STATS } from '../../constants/stats'
 import { FontAwesome5 } from '@expo/vector-icons'
 import { ScrollView } from 'react-native-gesture-handler'
+import { useQuery } from 'react-query'
 
 const DURATION = 400
 
@@ -150,20 +151,17 @@ const defaultValue = {
 
 const AxieDetailScreen: React.FC<Props> = ({ route, navigation }) => {
   const item: AxiesSoldResult = route.params.axie
-  const [axieDetail, setAxieDetail] = useState<Axie>(defaultValue)
 
-  const [isLoading, setIsLoading] = useState(false)
-
-  useEffect(() => {
-    const fetchData = async () => {
-      // setIsLoading(true)
-      const response = await GetAxieDetail(item.id)
-      setAxieDetail(response.data.axie)
-      // setIsLoading(false)
-    }
-
-    fetchData()
-  }, [])
+  const {
+    data: axieDetail,
+    isLoading,
+    isError,
+    isSuccess,
+    refetch,
+  } = useQuery(['axiedetails', item.id], async ({ queryKey }) => {
+    const response = await GetAxieDetail(queryKey[1])
+    return response.data.axie
+  })
 
   return (
     <View style={{ flex: 1 }}>
