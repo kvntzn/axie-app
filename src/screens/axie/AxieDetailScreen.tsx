@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import { StyleSheet, View, Image, Dimensions } from 'react-native'
+import React, { useEffect, useMemo, useState } from 'react'
+import { StyleSheet, View, Image, Dimensions, FlatList } from 'react-native'
 import { Icon, Text, TopNavigationAction } from '@ui-kitten/components'
 
 import { SharedElement } from 'react-navigation-shared-element'
@@ -12,12 +12,13 @@ import { AxieClassIcon } from '../../components'
 
 import * as Animatable from 'react-native-animatable'
 import { GetAxieDetail } from '../../api/axie'
-import { Axie } from '../../interface/IAxieDetail'
+import { Axie, Part } from '../../interface/IAxieDetail'
 import { determineStats } from '../../util/statsColor'
 import { STATS } from '../../constants/stats'
 import { FontAwesome5 } from '@expo/vector-icons'
 import { ScrollView } from 'react-native-gesture-handler'
 import { useQuery } from 'react-query'
+import { AxieDetailsTab } from './components'
 
 const DURATION = 400
 
@@ -152,6 +153,8 @@ const defaultValue = {
 const AxieDetailScreen: React.FC<Props> = ({ route, navigation }) => {
   const item: AxiesSoldResult = route.params.axie
 
+  const [selectedTabIndex, setSelectedTabIndex] = useState(0)
+
   const {
     data: axieDetail,
     isLoading,
@@ -162,6 +165,248 @@ const AxieDetailScreen: React.FC<Props> = ({ route, navigation }) => {
     const response = await GetAxieDetail(queryKey[1])
     return response.data.axie
   })
+
+  const renderSelectedPage = () => {
+    // Stats
+    if (selectedTabIndex === 0) {
+      return (
+        <>
+          {/* About */}
+          <View>
+            <Text category={'h6'}>About</Text>
+
+            <View style={{ flexDirection: 'row', marginTop: 16 }}>
+              <View style={{ flex: 0.5 }}>
+                <Text category={'label'}>Class</Text>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                  }}
+                >
+                  <AxieClassIcon
+                    element={item.class}
+                    opacity={'1'}
+                    color={determineBackground(item.class)}
+                    style={{
+                      height: 40,
+                      width: 40,
+                      marginRight: 8,
+                      // backgroundColor: 'red',
+                    }}
+                  />
+                  <Text category={'p2'}>{item.class}</Text>
+                </View>
+              </View>
+
+              <View style={{ flex: 0.5 }}>
+                <Text category={'label'}>Breed Count:</Text>
+                <Text category={'p1'} style={{ marginTop: 4 }}>
+                  {item.breedCount}/7
+                </Text>
+              </View>
+            </View>
+
+            <View style={{ marginTop: 8 }}>
+              <Text category={'label'}>Owner</Text>
+
+              <Text category={'s1'}>
+                {item.transferHistory.results[0].fromProfile.name}{' '}
+                <Text category={'p2'}>
+                  (ronin:{item.transferHistory.results[0].from})
+                </Text>
+              </Text>
+            </View>
+          </View>
+
+          <View style={{ marginTop: 16 }}>
+            <Text category={'h6'}>Stats</Text>
+
+            <View
+              style={{
+                flexDirection: 'row',
+                marginTop: 16,
+                justifyContent: 'space-evenly',
+              }}
+            >
+              <View style={styles.statsContainer}>
+                <Icon
+                  style={styles.statsIcon}
+                  fill={determineStats(STATS.HP)}
+                  name='heart'
+                />
+                <View>
+                  <Text category={'label'}>Health</Text>
+                  <View style={styles.statsValue}>
+                    <Text category={'p2'}>{axieDetail?.stats.hp}</Text>
+                  </View>
+                </View>
+              </View>
+
+              <View style={styles.statsContainer}>
+                <Icon
+                  style={styles.statsIcon}
+                  fill={determineStats(STATS.SPEED)}
+                  name='flash'
+                />
+                <View>
+                  <Text category={'label'}>Speed</Text>
+                  <View style={styles.statsValue}>
+                    <Text category={'p2'}>{axieDetail?.stats.hp}</Text>
+                  </View>
+                </View>
+              </View>
+
+              <View style={styles.statsContainer}>
+                <Icon
+                  style={styles.statsIcon}
+                  fill={determineStats(STATS.SKILL)}
+                  name='star'
+                />
+                <View>
+                  <Text category={'label'}>Skill</Text>
+                  <View style={styles.statsValue}>
+                    <Text category={'p2'}>{axieDetail?.stats.skill}</Text>
+                  </View>
+                </View>
+              </View>
+
+              <View style={styles.statsContainer}>
+                <FontAwesome5
+                  name='fire'
+                  size={18}
+                  style={{ marginRight: 8 }}
+                  color={determineStats(STATS.MORALE)}
+                />
+                <View>
+                  <Text category={'label'}>Morale</Text>
+                  <View style={styles.statsValue}>
+                    <Text category={'p2'}>{axieDetail?.stats.morale}</Text>
+                  </View>
+                </View>
+              </View>
+            </View>
+          </View>
+
+          <View style={{ marginTop: 16 }}>
+            <Text category={'h6'}>Body Parts</Text>
+
+            <View
+              style={{
+                flexDirection: 'row',
+                marginTop: 16,
+                justifyContent: 'space-evenly',
+              }}
+            >
+              <View>
+                {axieDetail?.parts.slice(0, 2).map((part) => (
+                  <View key={part.id} style={{ marginBottom: 8 }}>
+                    <Text category={'label'}>{part.type}</Text>
+                    <Text category={'p1'} style={{ marginTop: 4 }}>
+                      {part.name}
+                    </Text>
+                  </View>
+                ))}
+              </View>
+
+              <View>
+                {axieDetail?.parts.slice(2, 4).map((part) => (
+                  <View key={part.id} style={{ marginBottom: 8 }}>
+                    <Text category={'label'}>{part.type}</Text>
+                    <Text category={'p1'} style={{ marginTop: 4 }}>
+                      {part.name}
+                    </Text>
+                  </View>
+                ))}
+              </View>
+
+              <View>
+                {axieDetail?.parts.slice(4, 6).map((part) => (
+                  <View key={part.id} style={{ marginBottom: 8 }}>
+                    <Text category={'label'}>{part.type}</Text>
+                    <Text category={'p1'} style={{ marginTop: 4 }}>
+                      {part.name}
+                    </Text>
+                  </View>
+                ))}
+              </View>
+            </View>
+          </View>
+        </>
+      )
+    }
+
+    // Abilities
+    if (selectedTabIndex === 1) {
+      return (
+        <View>
+          <Text category={'h6'}>Abilities</Text>
+
+          <FlatList
+            contentContainerStyle={{ alignItems: 'center' }}
+            numColumns={2}
+            data={axieDetail?.parts}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.id}
+          />
+        </View>
+      )
+    }
+  }
+
+  const renderItem = ({ item }: { item: Part }) => {
+    return item.abilities.length ? (
+      <View
+        style={{
+          margin: 4,
+          marginHorizontal: 16,
+          alignItems: 'center',
+          // backgroundColor: 'red',
+          padding: 0,
+        }}
+      >
+        <Text category={'s2'}>{item.name}</Text>
+        <View>
+          <Text
+            category={'label'}
+            style={{
+              color: '#fff',
+              fontSize: 9,
+              position: 'absolute',
+              zIndex: 1,
+              left: 35,
+              top: 10,
+            }}
+          >
+            {item.abilities[0].name}
+          </Text>
+          <Image
+            source={{ uri: item.abilities[0].backgroundUrl }}
+            style={{ height: 150, width: 120 }}
+            resizeMode={'contain'}
+          />
+
+          <Text
+            category={'label'}
+            style={{
+              color: '#fff',
+              fontSize: 9,
+              position: 'absolute',
+              zIndex: 1,
+              left: 2,
+              top: 100,
+              right: 0,
+              // bottom: 10,
+              // flexShrink: 1,
+              marginHorizontal: 8,
+            }}
+          >
+            {item.abilities[0].description}
+          </Text>
+        </View>
+      </View>
+    ) : null
+  }
 
   return (
     <View style={{ flex: 1 }}>
@@ -216,187 +461,29 @@ const AxieDetailScreen: React.FC<Props> = ({ route, navigation }) => {
         </SharedElement>
       </View>
 
-      <View style={styles.image}>
-        <SharedElement id={`item.${item.id}.image`}>
-          <Image
-            source={{ uri: item.image }}
-            style={{
-              height: 200,
-              width: 200,
-            }}
-          />
-        </SharedElement>
-      </View>
+      {/* <View style={styles.image}> */}
+      <SharedElement id={`item.${item.id}.image`} style={styles.image}>
+        <Image
+          source={{ uri: item.image }}
+          style={{
+            height: 200,
+            width: 200,
+          }}
+        />
+      </SharedElement>
+      {/* </View> */}
 
       <SharedElement id={`general.bg`} style={[StyleSheet.absoluteFillObject]}>
-        <ScrollView style={styles.bg}>
-          {/* About */}
-          <View>
-            <Text category={'h6'}>About</Text>
-
-            <View style={{ flexDirection: 'row', marginTop: 16 }}>
-              <View style={{ flex: 0.5 }}>
-                <Text category={'label'}>Class</Text>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                  }}
-                >
-                  <AxieClassIcon
-                    element={item.class}
-                    opacity={'1'}
-                    color={determineBackground(item.class)}
-                    style={{
-                      height: 40,
-                      width: 40,
-                      marginRight: 8,
-                      // backgroundColor: 'red',
-                    }}
-                  />
-                  <Text category={'p2'}>{item.class}</Text>
-                </View>
-              </View>
-
-              <View style={{ flex: 0.5 }}>
-                <Text category={'label'}>Breed Count:</Text>
-                <Text category={'p1'} style={{ marginTop: 4 }}>
-                  {item.breedCount}/7
-                </Text>
-              </View>
-            </View>
-
-            <View style={{ marginTop: 8 }}>
-              <Text category={'label'}>Owner</Text>
-
-              <Text category={'s1'}>
-                {item.transferHistory.results[0].fromProfile.name}{' '}
-                <Text category={'p2'}>
-                  (ronin:{item.transferHistory.results[0].from})
-                </Text>
-              </Text>
-            </View>
+        <View style={styles.bg}>
+          <View style={{ alignSelf: 'center', marginTop: 20, zIndex: 11 }}>
+            <AxieDetailsTab
+              value={selectedTabIndex}
+              onChangeItem={(index) => setSelectedTabIndex(index)}
+            />
           </View>
 
-          {/* Stats */}
-          {!isLoading && (
-            <>
-              <View style={{ marginTop: 16 }}>
-                <Text category={'h6'}>Stats</Text>
-
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    marginTop: 16,
-                    justifyContent: 'space-evenly',
-                  }}
-                >
-                  <View style={styles.statsContainer}>
-                    <Icon
-                      style={styles.statsIcon}
-                      fill={determineStats(STATS.HP)}
-                      name='heart'
-                    />
-                    <View>
-                      <Text category={'label'}>Health</Text>
-                      <View style={styles.statsValue}>
-                        <Text category={'p2'}>{axieDetail?.stats.hp}</Text>
-                      </View>
-                    </View>
-                  </View>
-
-                  <View style={styles.statsContainer}>
-                    <Icon
-                      style={styles.statsIcon}
-                      fill={determineStats(STATS.SPEED)}
-                      name='flash'
-                    />
-                    <View>
-                      <Text category={'label'}>Speed</Text>
-                      <View style={styles.statsValue}>
-                        <Text category={'p2'}>{axieDetail?.stats.hp}</Text>
-                      </View>
-                    </View>
-                  </View>
-
-                  <View style={styles.statsContainer}>
-                    <Icon
-                      style={styles.statsIcon}
-                      fill={determineStats(STATS.SKILL)}
-                      name='star'
-                    />
-                    <View>
-                      <Text category={'label'}>Skill</Text>
-                      <View style={styles.statsValue}>
-                        <Text category={'p2'}>{axieDetail?.stats.skill}</Text>
-                      </View>
-                    </View>
-                  </View>
-
-                  <View style={styles.statsContainer}>
-                    <FontAwesome5
-                      name='fire'
-                      size={18}
-                      style={{ marginRight: 8 }}
-                      color={determineStats(STATS.MORALE)}
-                    />
-                    <View>
-                      <Text category={'label'}>Morale</Text>
-                      <View style={styles.statsValue}>
-                        <Text category={'p2'}>{axieDetail?.stats.morale}</Text>
-                      </View>
-                    </View>
-                  </View>
-                </View>
-              </View>
-
-              <View style={{ marginTop: 16 }}>
-                <Text category={'h6'}>Body Parts</Text>
-
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    marginTop: 16,
-                    justifyContent: 'space-evenly',
-                  }}
-                >
-                  <View>
-                    {axieDetail.parts.slice(0, 2).map((part) => (
-                      <View key={part.id} style={{ marginBottom: 8 }}>
-                        <Text category={'label'}>{part.type}</Text>
-                        <Text category={'p1'} style={{ marginTop: 4 }}>
-                          {part.name}
-                        </Text>
-                      </View>
-                    ))}
-                  </View>
-
-                  <View>
-                    {axieDetail.parts.slice(2, 4).map((part) => (
-                      <View key={part.id} style={{ marginBottom: 8 }}>
-                        <Text category={'label'}>{part.type}</Text>
-                        <Text category={'p1'} style={{ marginTop: 4 }}>
-                          {part.name}
-                        </Text>
-                      </View>
-                    ))}
-                  </View>
-
-                  <View>
-                    {axieDetail.parts.slice(4, 6).map((part) => (
-                      <View key={part.id} style={{ marginBottom: 8 }}>
-                        <Text category={'label'}>{part.type}</Text>
-                        <Text category={'p1'} style={{ marginTop: 4 }}>
-                          {part.name}
-                        </Text>
-                      </View>
-                    ))}
-                  </View>
-                </View>
-              </View>
-            </>
-          )}
-        </ScrollView>
+          {!isLoading && renderSelectedPage()}
+        </View>
       </SharedElement>
     </View>
   )
@@ -412,20 +499,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   image: {
+    // backgroundColor: 'red',
     position: 'absolute',
-    top: 0,
-    bottom: 300,
     left: 0,
     right: 0,
-    //   backgroundColor: 'blue',
     alignItems: 'center',
-    justifyContent: 'center',
-    zIndex: 2,
+    top: 170,
+    zIndex: 1,
   },
   bg: {
     flex: 1,
     padding: 16,
-    paddingTop: 48,
+    // paddingTop: 48,
     backgroundColor: '#fff',
     borderRadius: 32,
     transform: [{ translateY: Dimensions.get('window').height * 0.38 }],
