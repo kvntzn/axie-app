@@ -25,7 +25,7 @@ import { STATS } from '../../constants/stats'
 import { FontAwesome5 } from '@expo/vector-icons'
 
 import { useQuery } from 'react-query'
-import { Abilities, AxieDetailsTab } from './components'
+import { Abilities, AxieDetailsTab, Family } from './components'
 
 const DURATION = 400
 
@@ -348,69 +348,10 @@ const AxieDetailScreen: React.FC<Props> = ({ route, navigation }) => {
       return axieDetail?.parts && <Abilities data={axieDetail.parts} />
     }
 
-    //Children
+    //Family
     if (selectedTabIndex === 2) {
-      return (
-        <View>
-          <Text category={'h6'}>Children</Text>
-
-          <FlatList
-            contentContainerStyle={{ alignItems: 'center', marginTop: 8 }}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            data={axieDetail?.children}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.id}
-          />
-        </View>
-      )
+      return axieDetail?.children && <Family data={axieDetail.children} />
     }
-  }
-
-  const renderItem = ({ item }: { item: Child }) => {
-    return (
-      <View
-        style={{
-          padding: 8,
-          paddingTop: 16,
-          marginRight: 4,
-          backgroundColor: `${determineBackground(item.class)}B3`,
-          borderRadius: 10,
-          width: 150,
-          height: 175,
-          alignItems: 'center',
-        }}
-      >
-        <Text
-          style={{ color: '#fff', alignSelf: 'flex-start' }}
-          category={'label'}
-          numberOfLines={1}
-        >
-          #{item.id}
-        </Text>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignSelf: 'flex-start',
-          }}
-        >
-          <AxieClassIcon
-            element={item.class}
-            opacity={'1'}
-            color={'#fff'}
-            style={{ height: 20, width: 20, marginRight: 4 }}
-          />
-          <Text style={{ color: '#fff' }} category={'c1'} numberOfLines={1}>
-            {item.name}
-          </Text>
-        </View>
-        <Image
-          source={{ uri: item.image }}
-          style={{ height: 100, width: 100 }}
-          resizeMode={'cover'}
-        />
-      </View>
-    )
   }
 
   return (
