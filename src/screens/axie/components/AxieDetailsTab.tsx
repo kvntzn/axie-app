@@ -44,17 +44,18 @@ const AxieDetailsTab: React.FC<{
         {renderUnderLine(1)}
       </TouchableOpacity>
 
-      {/* <TouchableOpacity style={styles.item} onPress={() => onChangeItem(2)}>
+      <TouchableOpacity style={styles.item} onPress={() => onChangeItem(2)}>
         <View style={styles.upper}>
-          <Image
+          {/* <Image
             source={require('../../../../assets/item.png')}
             style={{ width: 24, height: 24 }}
-          />
-          <Text category={'s1'}>Items</Text>
+          /> */}
+          <Text category={'s1'}>Children</Text>
         </View>
         {renderUnderLine(2)}
       </TouchableOpacity>
 
+      {/* 
       <TouchableOpacity style={styles.item} onPress={() => onChangeItem(3)}>
         <View style={styles.upper}>
           <Image

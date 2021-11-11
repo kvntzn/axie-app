@@ -16,7 +16,15 @@ export interface Ability {
   effectIconUrl: string
   __typename: string
 }
-
+export interface Child {
+  id: string
+  name: string
+  class: string
+  image: string
+  title: string
+  stage: number
+  __typename: string
+}
 export interface Part {
   id: string
   name: string
@@ -88,7 +96,7 @@ export interface Axie {
   auction: Auction
   ownerProfile: OwnerProfile
   battleInfo: BattleInfo
-  children: any[]
+  children?: Child[]
   __typename: string
 }
 

@@ -1,5 +1,12 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { StyleSheet, View, Image, Dimensions, FlatList } from 'react-native'
+import {
+  StyleSheet,
+  View,
+  Image,
+  Dimensions,
+  FlatList,
+  StatusBar,
+} from 'react-native'
 import { Icon, Text, TopNavigationAction } from '@ui-kitten/components'
 
 import { SharedElement } from 'react-navigation-shared-element'
@@ -12,13 +19,13 @@ import { AxieClassIcon } from '../../components'
 
 import * as Animatable from 'react-native-animatable'
 import { GetAxieDetail } from '../../api/axie'
-import { Axie, Part } from '../../interface/IAxieDetail'
+import { Axie, Part, Child } from '../../interface/IAxieDetail'
 import { determineStats } from '../../util/statsColor'
 import { STATS } from '../../constants/stats'
 import { FontAwesome5 } from '@expo/vector-icons'
-import { ScrollView } from 'react-native-gesture-handler'
+
 import { useQuery } from 'react-query'
-import { AxieDetailsTab } from './components'
+import { Abilities, AxieDetailsTab } from './components'
 
 const DURATION = 400
 
@@ -338,14 +345,20 @@ const AxieDetailScreen: React.FC<Props> = ({ route, navigation }) => {
 
     // Abilities
     if (selectedTabIndex === 1) {
+      return axieDetail?.parts && <Abilities data={axieDetail.parts} />
+    }
+
+    //Children
+    if (selectedTabIndex === 2) {
       return (
         <View>
-          <Text category={'h6'}>Abilities</Text>
+          <Text category={'h6'}>Children</Text>
 
           <FlatList
-            contentContainerStyle={{ alignItems: 'center' }}
-            numColumns={2}
-            data={axieDetail?.parts}
+            contentContainerStyle={{ alignItems: 'center', marginTop: 8 }}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            data={axieDetail?.children}
             renderItem={renderItem}
             keyExtractor={(item) => item.id}
           />
@@ -354,69 +367,61 @@ const AxieDetailScreen: React.FC<Props> = ({ route, navigation }) => {
     }
   }
 
-  const renderItem = ({ item }: { item: Part }) => {
-    return item.abilities.length ? (
+  const renderItem = ({ item }: { item: Child }) => {
+    return (
       <View
         style={{
-          margin: 4,
-          marginHorizontal: 16,
+          padding: 8,
+          paddingTop: 16,
+          marginRight: 4,
+          backgroundColor: `${determineBackground(item.class)}B3`,
+          borderRadius: 10,
+          width: 150,
+          height: 175,
           alignItems: 'center',
-          // backgroundColor: 'red',
-          padding: 0,
         }}
       >
-        <Text category={'s2'}>{item.name}</Text>
-        <View>
-          <Text
-            category={'label'}
-            style={{
-              color: '#fff',
-              fontSize: 9,
-              position: 'absolute',
-              zIndex: 1,
-              left: 35,
-              top: 10,
-            }}
-          >
-            {item.abilities[0].name}
-          </Text>
-          <Image
-            source={{ uri: item.abilities[0].backgroundUrl }}
-            style={{ height: 150, width: 120 }}
-            resizeMode={'contain'}
+        <Text
+          style={{ color: '#fff', alignSelf: 'flex-start' }}
+          category={'label'}
+          numberOfLines={1}
+        >
+          #{item.id}
+        </Text>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignSelf: 'flex-start',
+          }}
+        >
+          <AxieClassIcon
+            element={item.class}
+            opacity={'1'}
+            color={'#fff'}
+            style={{ height: 20, width: 20, marginRight: 4 }}
           />
-
-          <Text
-            category={'label'}
-            style={{
-              color: '#fff',
-              fontSize: 9,
-              position: 'absolute',
-              zIndex: 1,
-              left: 2,
-              top: 100,
-              right: 0,
-              // bottom: 10,
-              // flexShrink: 1,
-              marginHorizontal: 8,
-            }}
-          >
-            {item.abilities[0].description}
+          <Text style={{ color: '#fff' }} category={'c1'} numberOfLines={1}>
+            {item.name}
           </Text>
         </View>
+        <Image
+          source={{ uri: item.image }}
+          style={{ height: 100, width: 100 }}
+          resizeMode={'cover'}
+        />
       </View>
-    ) : null
+    )
   }
 
   return (
-    <View style={{ flex: 1 }}>
+    <>
       <TopNavigationAction
         icon={BackIcon}
         onPress={() => navigation.goBack()}
         style={{
           //   position: 'absolute',
-          marginTop: 40,
           //   left: 20,
+          marginTop: Dimensions.get('window').height / 15,
           zIndex: 99,
         }}
       />
@@ -485,7 +490,7 @@ const AxieDetailScreen: React.FC<Props> = ({ route, navigation }) => {
           {!isLoading && renderSelectedPage()}
         </View>
       </SharedElement>
-    </View>
+    </>
   )
 }
 
