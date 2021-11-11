@@ -12,12 +12,12 @@ const Routes = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        defaultScreenOptions={{
-          cardStyleInterpolator: ({ current: { progress } }) => {
-            return { cardStyle: { opacity: progress } }
-          },
-          cardStyle: { backgroundColor: 'transparent' },
-        }}
+      // defaultScreenOptions={{
+      //   cardStyleInterpolator: ({ current: { progress } }) => {
+      //     return { cardStyle: { opacity: progress } }
+      //   },
+      //   // cardStyle: { backgroundColor: 'transparent' },
+      // }}
       >
         <Stack.Screen
           name='Home'
@@ -33,25 +33,25 @@ const Routes = () => {
             headerShown: false,
           }}
           sharedElements={(route, otherRoute, showing) => {
-            const { axie } = route.params
+            const { id } = route.params
             return [
               {
-                id: `item.${axie.id}.bg`,
+                id: `item.${id}.bg`,
               },
               {
                 id: `general.bg`,
               },
               {
-                id: `item.${axie.id}.class`,
+                id: `item.${id}.class`,
               },
               {
-                id: `item.${axie.id}.id`,
+                id: `item.${id}.id`,
               },
               {
-                id: `item.${axie.id}.name`,
+                id: `item.${id}.name`,
               },
               {
-                id: `item.${axie.id}.image`,
+                id: `item.${id}.image`,
               },
             ]
           }}

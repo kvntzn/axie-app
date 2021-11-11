@@ -11,12 +11,17 @@ import { SharedElement } from 'react-navigation-shared-element'
 import { useNavigation } from '@react-navigation/core'
 
 const AxiesSoldCard: React.FC<{ item: AxiesSoldResult }> = ({ item }) => {
-  const { navigate } = useNavigation()
+  const navigation = useNavigation()
 
   return (
     <TouchableOpacity
       onPress={() => {
-        navigate('AxieDetail', { axie: item })
+        navigation.navigate('AxieDetail', {
+          id: item.id,
+          class: item.class,
+          name: item.name,
+          image: item.image,
+        })
       }}
       style={{
         margin: 16,
